@@ -19,9 +19,12 @@ fc-cache -fv
 
 ### Dependencies
 
+```
 sudo apt install fzf
 sudo apt install ripgrep
 sudo apt install fd-find
+```
+
 
 ### Node
 Preferably install node using `node version manager`
