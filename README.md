@@ -6,13 +6,10 @@ My Lazyvim config
 https://github.com/neovim/neovim/blob/master/INSTALL.md
 
 ### Download and install nerd fonts
-```
 https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/UbuntuMono.zip
-
+```
 mkdir -p  /.local/share/fonts
-
-cp /path/to/font.ttf  /.local/share/fonts/
-
+cp /path/to/font/*  /.local/share/fonts/
 fc-cache -fv
 ```
 
