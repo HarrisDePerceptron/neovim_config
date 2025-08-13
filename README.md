@@ -6,7 +6,7 @@ My Lazyvim config
 https://github.com/neovim/neovim/blob/master/INSTALL.md
 
 ### Download and install nerd fonts
-
+```
 https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/UbuntuMono.zip
 
 mkdir -p  /.local/share/fonts
@@ -14,7 +14,7 @@ mkdir -p  /.local/share/fonts
 cp /path/to/font.ttf  /.local/share/fonts/
 
 fc-cache -fv
-
+```
 
 
 ### Dependencies
@@ -26,8 +26,6 @@ sudo apt install fd-find
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --all
-
-
 ```
 
 
