@@ -43,6 +43,5 @@ Now restart terminal
 ```
 #~/.bashrc
 ...
-
-alias alias vi='nvim'
+alias vi='nvim'
 ```
