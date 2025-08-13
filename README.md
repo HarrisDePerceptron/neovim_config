@@ -31,7 +31,18 @@ Preferably install node using `node version manager`
 
 https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script
 
+## The Config
 
+```
+cp neovim_config ~/.config/nvim
+```
 
+Now restart terminal
 
+### Alias(Optional)
+```
+#~/.bashrc
+...
 
+alias alias vi='nvim'
+```
