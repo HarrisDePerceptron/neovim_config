@@ -10,3 +10,4 @@
 --end
 
 vim.opt.relativenumber = false
+vim.o.termguicolors = true
