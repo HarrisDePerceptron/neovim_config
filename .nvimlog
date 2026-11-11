@@ -1,0 +1,2 @@
+WRN 2026-11-09T12:23:11.656 c/nvim.21457.0 server_start:193: Failed to start server: operation not permitted: /var/folders/wc/4k66wj0d351bl3dg5n5_9n300000gn/T/nvim.mac/SqFN09/nvim.20259.0
+WRN 2026-11-09T12:23:18.705 c/nvim.21457.0 server_start:193: Failed to start server: operation not permitted: /var/folders/wc/4k66wj0d351bl3dg5n5_9n300000gn/T/nvim.mac/63AYLT/nvim.20393.0
