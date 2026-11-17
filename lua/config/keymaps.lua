@@ -10,67 +10,40 @@
 
 -- vim.api.nvim_set_keymap("i", "<C-l>", "<C-x><C-o>", { noremap = true, silent = true })
 --
-local function open_right_terminal()
+local function toggle_right_terminal()
   vim.cmd("stopinsert")
-  vim.cmd("botright vsplit | term")
+  local buf = vim.t.right_terminal_buffer
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local win_buf = vim.api.nvim_win_get_buf(win)
+    if (win_buf == buf or vim.w[win].right_terminal) and vim.bo[win_buf].buftype == "terminal" then
+      vim.t.right_terminal_buffer = win_buf
+      vim.t.right_terminal_width = vim.api.nvim_win_get_width(win)
+      vim.bo[win_buf].bufhidden = "hide"
+      if #vim.api.nvim_tabpage_list_wins(0) == 1 then
+        vim.cmd("topleft new")
+      end
+      vim.api.nvim_win_close(win, true)
+      return
+    end
+  end
+
+  vim.cmd("botright vsplit")
+  if buf and vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "terminal" then
+    vim.api.nvim_win_set_buf(0, buf)
+  else
+    vim.cmd("term")
+    vim.t.right_terminal_buffer = vim.api.nvim_get_current_buf()
+  end
   vim.w.right_terminal = true
   vim.bo.bufhidden = "hide"
+  if vim.t.right_terminal_width then
+    vim.api.nvim_win_set_width(0, vim.t.right_terminal_width)
+  end
   vim.cmd("startinsert")
 end
 
-local function toggle_right_terminals()
-  local wins = {}
-  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if vim.w[win].right_terminal and vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "terminal" then
-      table.insert(wins, win)
-    end
-  end
-  table.sort(wins, function(a, b)
-    return vim.api.nvim_win_get_position(a)[2] < vim.api.nvim_win_get_position(b)[2]
-  end)
-
-  vim.cmd("stopinsert")
-  if #wins > 0 then
-    local saved = {}
-    for _, win in ipairs(wins) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      vim.bo[buf].bufhidden = "hide"
-      table.insert(saved, { buf = buf, width = vim.api.nvim_win_get_width(win) })
-    end
-    vim.t.right_terminal_windows = saved
-    if #wins == #vim.api.nvim_tabpage_list_wins(0) then
-      vim.cmd("topleft new")
-    end
-    for _, win in ipairs(wins) do
-      vim.api.nvim_win_close(win, true)
-    end
-    return
-  end
-
-  local restored = {}
-  for _, entry in ipairs(vim.t.right_terminal_windows or {}) do
-    if vim.api.nvim_buf_is_valid(entry.buf) and vim.bo[entry.buf].buftype == "terminal" then
-      vim.cmd("botright vsplit")
-      vim.api.nvim_win_set_buf(0, entry.buf)
-      vim.w.right_terminal = true
-      vim.bo.bufhidden = "hide"
-      table.insert(restored, { win = vim.api.nvim_get_current_win(), width = entry.width })
-    end
-  end
-  -- Retain snapshots only while hidden, so manually closed panes stay closed.
-  vim.t.right_terminal_windows = nil
-  if #restored == 0 then
-    open_right_terminal()
-  else
-    for _, entry in ipairs(restored) do
-      vim.api.nvim_win_set_width(entry.win, entry.width)
-    end
-    vim.cmd("startinsert")
-  end
-end
-
-vim.keymap.set({ "n", "t" }, [[<C-\>]], open_right_terminal, { desc = "Open Right Terminal" })
-vim.keymap.set({ "n", "t" }, [[<C-S-\>]], toggle_right_terminals, { desc = "Toggle Right Terminals" })
+vim.keymap.set({ "n", "t" }, [[<C-\>]], toggle_right_terminal, { desc = "Toggle Right Terminal" })
+vim.keymap.set({ "n", "t" }, [[<C-S-\>]], toggle_right_terminal, { desc = "Toggle Right Terminal" })
 
 -- Keep hidden terminal sessions scoped to their tab (also survives config reloads).
 local function toggle_bottom_terminals()
